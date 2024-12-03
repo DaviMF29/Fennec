@@ -1,0 +1,16 @@
+{
+    "welcome": "Welcome",
+    "new_here": "New here?",
+    "already_have_account": "Already have an account?",
+    "create_account": "Create an account",
+    "login": "Login",
+    "username_placeholder": "Username",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "repeat_password_placeholder": "Repeat Password",
+    "fill_all_fields": "Please fill all fields.",
+    "login_issues": "Having issues logging in?",
+    "register": "Register",
+    "toggle_theme": "Change theme",
+    "go_to_login": "Go to login"
+}

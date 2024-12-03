@@ -1,0 +1,36 @@
+:root {
+  --color-background: #000014;
+  --color-primary: #0d0d20;
+  --color-secondary: #1a1a2c;
+  --color-text-primary: #ffffff;
+  --color-wombat: #6e54b5;
+}
+
+.theme-white {
+  --color-background: #ffffff;
+  --color-primary: #f7f7f7;
+  --color-secondary: #ededed;
+  --color-text-primary: #000014;
+  --color-wombat: #6e54b5;
+}
+
+* {
+  font-family: montserrat, sans-serif;
+  margin: 0;
+  padding: 0;
+  color: var(--color-text-primary);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--color-background);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+}
