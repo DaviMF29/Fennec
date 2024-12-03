@@ -1,7 +1,3 @@
-Here’s an improved and more polished version of the README:
-
----
-
 # **Wombat: A Social Network for Developers**
 
 Wombat is a social platform designed for developers to connect, share knowledge, and showcase their projects. Built with **Golang** on the backend and **React** on the frontend, Wombat delivers high performance, scalability, and an engaging developer-centric experience.
