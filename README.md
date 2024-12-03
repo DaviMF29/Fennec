@@ -26,9 +26,9 @@ Wombat is a social platform designed for developers to connect, share knowledge,
 
 ### **Frontend**
 - **React**: Modern and dynamic user interfaces.
-- **Material-UI**: Responsive, sleek, and accessible design components.
 - **React Query**: Simplified state management and efficient data fetching.
 - **Axios**: Robust API interaction.
+- **Key Feature**: All frontend components were built from scratch by our team. We did not use any pre-made components from libraries or frameworks, ensuring complete customization and control over the design and functionality of the application.
 
 ---
 
