@@ -1,0 +1,14 @@
+.env
+
+vendor/
+
+*.exe
+*.out
+*.so
+
+*.log
+*.tmp
+
+.DS_Store
+.idea/
+.vscode/
