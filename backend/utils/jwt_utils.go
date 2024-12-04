@@ -3,18 +3,24 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"time"
-	"github.com/DaviMF29/wombat/models"
-	"github.com/dgrijalva/jwt-go"
+
+github.com/joho/godotenv"
 )
 
 var SECRET_KEY []byte
 
 func init() {
+	err := godotenv.Load(".env") 
+	if err != nil {
+		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+	}
+
 	SECRET_KEY = []byte(os.Getenv("SECRET_KEY"))
 	if len(SECRET_KEY) == 0 {
-		panic("SECRET_KEY is not set in environment variables")
+		log.Fatal("SECRET_KEY não está definida no arquivo .env")
 	}
 }
 

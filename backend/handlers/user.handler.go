@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"github.com/DaviMF29/wombat/models"
+	"github.com/DaviMF29/wombat/repository"
 	"github.com/go-chi/chi"
 	"github.com/DaviMF29/wombat/utils"
 )
@@ -25,19 +26,22 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
         return
 	}
 
-	userDataByEmail, err := models.GetUserByEmail(user.Email)
+	userDataByEmail, err := repository.GetUserByEmail(user.Email)
+
     if err == nil && userDataByEmail.Email != "" {
 		utils.SendErrorResponse(w, "Email already exists")
         return
     }
 
-    userDataByUsername, err := models.GetUserByUsername(user.Username)
+    userDataByUsername, err := repository.GetUserByUsername(user.Username)
+
     if err == nil && userDataByUsername.Username != "" {
 		utils.SendErrorResponse(w, "Username already exists")
         return
     }
 
-	id, err := models.InsertUser(user)
+	id, err := repository.InsertUser(user)
+
 	if err != nil {
 		utils.SendErrorResponse(w, "Error inserting user")
 		return
@@ -53,7 +57,9 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := models.GetUserById(id)
+
+	user, err := repository.GetUserById(id)
+
 	if err != nil {
 		utils.SendErrorResponse(w, "Error getting user")
 		return

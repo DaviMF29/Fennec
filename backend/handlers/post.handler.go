@@ -5,12 +5,9 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
 	"github.com/DaviMF29/wombat/models"
-	"github.com/DaviMF29/wombat/utils"
-	"github.com/go-chi/chi"
+	"github.com/DaviMF29/wombat/repository"
 )
-
 func InsertPostHandler(w http.ResponseWriter, r *http.Request) {
 	var post models.Post
 
@@ -42,7 +39,8 @@ func InsertPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	post.UserID = userId
 
-	id, err := models.InsertPost(post)
+	id, err := repository.InsertPost(post)
+
 	if err != nil {
 		utils.SendErrorResponse(w, "Error inserting post")
 		return
@@ -58,7 +56,9 @@ func GetPostByIdHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post, err := models.GetPostById(id)
+
+	post, err := repository.GetPostById(id)
+
 	if err != nil {
 		utils.SendErrorResponse(w, "Error getting post")
 		return

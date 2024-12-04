@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/DaviMF29/wombat/models"
+	"github.com/DaviMF29/wombat/repository"
 	"github.com/DaviMF29/wombat/utils"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -37,7 +37,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func authenticate(email string, password string) (string, error) {
 
-	user, err := models.GetUserByEmail(email)
+	user, err := repository.GetUserByEmail(email)
 	if err != nil {
 		return "", err
 	}
