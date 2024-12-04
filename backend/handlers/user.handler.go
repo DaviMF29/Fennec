@@ -58,7 +58,14 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendSuccessResponse(w, fmt.Sprintf("User inserted with ID: %s", id))
+	token, err := utils.GenerateJWT(user)
+	if err != nil {
+		utils.SendErrorResponse(w, "Error generating token")
+		return
+	}
+
+	utils.SendSuccessResponse(w, fmt.Sprintf("User inserted with ID: %s:",id))
+	utils.SendSuccessResponse(w, fmt.Sprintf("Token: %s:",token))
 }
 
 // @Summary Get a user by ID
