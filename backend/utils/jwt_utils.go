@@ -3,10 +3,9 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"github.com/DaviMF29/wombat/models"
 	"os"
 	"time"
-
+	"github.com/DaviMF29/wombat/models"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -21,9 +20,9 @@ func init() {
 
 func GenerateJWT(user models.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":    user.ID,
+		"userId":user.ID,
 		"email": user.Email,
-		"exp":   time.Now().Add(time.Hour * 24).Unix(),
+		"exp":   time.Now().Add(time.Hour * 168).Unix(),
 	})
 
 	tokenString, err := token.SignedString(SECRET_KEY)
@@ -34,24 +33,26 @@ func GenerateJWT(user models.User) (string, error) {
 	return tokenString, nil
 }
 
-func GetUserIDFromToken(tokenString string) (int, error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("unexpected signing method")
-		}
-		return SECRET_KEY, nil
-	})
-	if err != nil {
-		return 0, fmt.Errorf("failed to parse token: %v", err)
-	}
+func GetUserIDFromToken(tokenString string) (string, error) {
+    token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+        if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+            return nil, errors.New("unexpected signing method")
+        }
+        return []byte(SECRET_KEY), nil
+    })
+    if err != nil {
+        return "", fmt.Errorf("failed to parse token: %w", err)
+    }
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userId, ok := claims["id"].(float64)
-		if !ok {
-			return 0, errors.New("user_id claim not found or invalid")
-		}
-		return int(userId), nil
-	} else {
-		return 0, errors.New("invalid token")
-	}
+    claims, ok := token.Claims.(jwt.MapClaims)
+    if !ok || !token.Valid {
+        return "", errors.New("invalid token claims")
+    }
+
+    userId, ok := claims["userId"].(string)
+    if !ok {
+        return "", errors.New("userId claim not found or invalid")
+    }
+
+    return userId, nil
 }

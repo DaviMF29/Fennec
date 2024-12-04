@@ -7,29 +7,8 @@ import (
 	"net/http"
 	"github.com/DaviMF29/wombat/models"
 	"github.com/go-chi/chi"
+	"github.com/DaviMF29/wombat/utils"
 )
-
-func GetUserHandler(w http.ResponseWriter, r *http.Request) {
-	id := chi.URLParam(r, "id")
-	if id == "" {
-		log.Println("ID não fornecido")
-		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
-		return
-	}
-
-	user, err := models.GetUserById(id)
-	if err != nil {
-		log.Printf("Erro ao buscar usuário: %v", err)
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(user); err != nil {
-		log.Printf("Erro ao codificar resposta: %v", err)
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-	}
-}
 
 func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
@@ -41,28 +20,44 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userEmail, err := models.GetUserByEmail(user.Email)
-	if err == nil && userEmail.Email != "" {
-		http.Error(w, http.StatusText(http.StatusConflict), http.StatusConflict)
-		return
+	if user.Name == "" || user.Username == "" ||user.Email == "" || user.Password == "" || user.BirthDate == ""{
+		http.Error(w, "Missing fields in request", http.StatusBadRequest)
+        return
 	}
+
+	userDataByEmail, err := models.GetUserByEmail(user.Email)
+    if err == nil && userDataByEmail.Email != "" {
+		utils.SendErrorResponse(w, "Email already exists")
+        return
+    }
+
+    userDataByUsername, err := models.GetUserByUsername(user.Username)
+    if err == nil && userDataByUsername.Username != "" {
+		utils.SendErrorResponse(w, "Username already exists")
+        return
+    }
 
 	id, err := models.InsertUser(user)
 	if err != nil {
-		log.Printf("Erro ao inserir usuário: %v", err)
-		resp := map[string]interface{}{
-			"error":   true,
-			"message": fmt.Sprintf("Erro ao inserir usuário: %v", err),
-		}
-		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(resp)
+		utils.SendErrorResponse(w, "Error inserting user")
 		return
 	}
 
-	resp := map[string]interface{}{
-		"error":   false,
-		"message": fmt.Sprintf("Usuário inserido com sucesso. ID: %s", id),
+	utils.SendSuccessResponse(w, fmt.Sprintf("User inserted with ID: %s", id))
+}
+
+func GetUserHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		utils.SendErrorResponse(w, "Missing ID in request")
+		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(resp)
+
+	user, err := models.GetUserById(id)
+	if err != nil {
+		utils.SendErrorResponse(w, "Error getting user")
+		return
+	}
+
+	utils.SendSuccessResponse(w, fmt.Sprintf("User: %v", user))
 }

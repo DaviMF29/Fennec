@@ -87,6 +87,20 @@ func GetUserByEmail(email string) (user User, err error) {
 	return user, nil
 }
 
+func GetUserByUsername(username string) (user User, err error) {
+	client, err := db.OpenConnection()
+	if err != nil {
+		return User{}, err
+	}
+	defer client.Disconnect(context.Background())
+	collection := client.Database("wombat").Collection("users")
+	err = collection.FindOne(context.Background(), bson.M{"username": username}).Decode(&user)
+	if err != nil {
+		return User{}, ErrNoRows
+	}
+	return user, nil
+}
+
 
 func encryptPassword(password string) (string, error) {
     bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
