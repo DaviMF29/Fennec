@@ -3,35 +3,13 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"log"
-	"os"
 	"time"
 
 	"github.com/DaviMF29/fennec/models"
 	"github.com/golang-jwt/jwt"
-	"github.com/joho/godotenv"
 )
 
 var SECRET_KEY []byte
-
-func init() {
-	env := os.Getenv("ENV")
-
-	if env == "production" {
-		log.Println("Running in production mode. Skipping .env loading.")
-		return
-	}
-
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
-
-	SECRET_KEY = []byte(os.Getenv("SECRET_KEY"))
-	if len(SECRET_KEY) == 0 {
-		log.Fatal("SECRET_KEY não está definida no arquivo .env")
-	}
-}
 
 func GenerateJWT(user models.User) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{

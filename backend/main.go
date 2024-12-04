@@ -3,11 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"github.com/DaviMF29/fennec/config"
+	_ "github.com/DaviMF29/fennec/docs"
 	"github.com/DaviMF29/fennec/routes"
-	_"github.com/DaviMF29/fennec/docs"
+	"github.com/joho/godotenv"
 )
-
 
 // @title API Fennec
 // @version 1.0
@@ -15,16 +16,42 @@ import (
 // @host https://wombat-production-e2c6.up.railway.app/
 // @BasePath /api
 
-
 func main() {
 	err := config.Load()
 	if err != nil {
 		log.Fatalf("Erro ao carregar configuração: %v", err)
 	}
-
+	loadEnv()
+	initSecretKey()
 	router := routes.RegisterRoutes()
 
 	port := config.GetServerPort().Port
 	log.Printf("Servidor iniciado na porta %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
+}
+
+
+var SECRET_KEY []byte
+
+func loadEnv() {
+	env := os.Getenv("ENV")
+
+	if env == "production" {
+		log.Println("Running in production mode. Skipping .env loading.")
+		return
+	}
+
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file: %v", err)
+	}
+
+	log.Println(".env file loaded successfully.")
+}
+
+func initSecretKey() {
+	SECRET_KEY = []byte(os.Getenv("SECRET_KEY"))
+	if len(SECRET_KEY) == 0 {
+		log.Fatal("SECRET_KEY is not defined in the environment variables")
+	}
 }
