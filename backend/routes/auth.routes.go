@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/DaviMF29/wombat/handlers"
+	"github.com/DaviMF29/fennec/handlers"
 	"github.com/go-chi/chi"
 )
 

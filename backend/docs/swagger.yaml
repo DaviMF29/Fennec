@@ -1,0 +1,266 @@
+basePath: /api
+definitions:
+  models.Comment:
+    properties:
+      UserId:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+    type: object
+  models.LoginData:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.Post:
+    properties:
+      comments:
+        items:
+          $ref: '#/definitions/models.Comment'
+        type: array
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      likes:
+        type: integer
+      saves:
+        type: integer
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  models.User:
+    properties:
+      birth_date:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+host: https://wombat-production-e2c6.up.railway.app/
+info:
+  contact: {}
+  description: Fennec is a social platform designed for developers to connect, share
+    knowledge, and showcase their projects. Built with Golang on the backend and React
+    on the frontend, Fennec delivers high performance, scalability, and an engaging
+    developer-centric experience.
+  title: API Fennec
+  version: "1.0"
+paths:
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user using their email and password, returning
+        a JWT token upon success.
+      parameters:
+      - description: Login data
+        in: body
+        name: loginData
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginData'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JWT token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+      - Authentication
+  /api/post:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new post associated with the authenticated user.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Post inserted with ID
+          schema:
+            type: string
+        "400":
+          description: Bad request - Missing fields or invalid JSON
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized - Token not provided or invalid
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to insert post
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new post
+      tags:
+      - Posts
+  /api/post/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a specific post by its unique ID.
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post retrieved successfully
+          schema:
+            $ref: '#/definitions/models.Post'
+        "400":
+          description: Missing ID in request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Error getting post
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a post by ID
+      tags:
+      - Posts
+  /api/user:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user with the provided details if the email and username
+        are unique.
+      parameters:
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User inserted successfully with ID
+          schema:
+            type: string
+        "400":
+          description: Bad request - Missing fields or invalid JSON
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict - Email or username already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to insert user
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - Users
+  /api/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a user based on the provided user ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User details
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad request - Missing ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found - User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to retrieve user
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get a user by ID
+      tags:
+      - Users
+swagger: "2.0"

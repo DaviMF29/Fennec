@@ -5,12 +5,23 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"github.com/DaviMF29/wombat/models"
-	"github.com/DaviMF29/wombat/repository"
+	"github.com/DaviMF29/fennec/models"
+	"github.com/DaviMF29/fennec/repository"
 	"github.com/go-chi/chi"
-	"github.com/DaviMF29/wombat/utils"
+	"github.com/DaviMF29/fennec/utils"
 )
 
+// @Summary Create a new user
+// @Description Creates a new user with the provided details if the email and username are unique.
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body models.User true "User data"
+// @Success 201 {string} string "User inserted successfully with ID"
+// @Failure 400 {object} map[string]string "Bad request - Missing fields or invalid JSON"
+// @Failure 409 {object} map[string]string "Conflict - Email or username already exists"
+// @Failure 500 {object} map[string]string "Internal server error - Unable to insert user"
+// @Router /api/user [post]
 func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
@@ -50,6 +61,17 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, fmt.Sprintf("User inserted with ID: %s", id))
 }
 
+// @Summary Get a user by ID
+// @Description Retrieves a user based on the provided user ID.
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} models.User "User details"
+// @Failure 400 {object} map[string]string "Bad request - Missing ID"
+// @Failure 404 {object} map[string]string "Not found - User not found"
+// @Failure 500 {object} map[string]string "Internal server error - Unable to retrieve user"
+// @Router /api/user/{id} [get]
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {

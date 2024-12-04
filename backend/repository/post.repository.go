@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"time"
-	"github.com/DaviMF29/wombat/db"
-	"github.com/DaviMF29/wombat/models"
+	"github.com/DaviMF29/fennec/db"
+	"github.com/DaviMF29/fennec/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -17,7 +17,7 @@ func InsertPost(post models.Post) (id string, err error) {
 	}
 	defer client.Disconnect(context.Background())
 
-	collection := client.Database("wombat").Collection("posts")
+	collection := client.Database("fennec").Collection("posts")
 
 	post.CreatedAt = time.Now()
 	post.UpdatedAt = time.Now()
@@ -38,7 +38,7 @@ func GetPostById(id string) (models.Post, error) {
 	}
 	defer client.Disconnect(context.Background())
 
-	collection := client.Database("wombat").Collection("posts")
+	collection := client.Database("fennec").Collection("posts")
 
 	// Converter ID para ObjectID
 	objectID, err := primitive.ObjectIDFromHex(id)

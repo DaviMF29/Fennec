@@ -2,7 +2,7 @@ package routes
 
 import (
 	"github.com/go-chi/chi"
-	"github.com/DaviMF29/wombat/handlers"
+	"github.com/DaviMF29/fennec/handlers"
 )
 
 func RegisterUserRoutes() *chi.Mux {
