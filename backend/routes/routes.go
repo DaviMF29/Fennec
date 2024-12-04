@@ -19,6 +19,7 @@ func RegisterRoutes() *chi.Mux {
 
 	r.Mount("/api/user", RegisterUserRoutes())
 	r.Mount("/api/login", RegisterAuthRoutes())
+	r.Mount("/api/post", RegisterPostRoutes())
 
 	return r
 }
