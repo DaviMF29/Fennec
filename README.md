@@ -1,6 +1,6 @@
-# **Wombat: A Social Network for Developers**
+# **Fennec: A Social Network for Developers**
 
-Wombat is a social platform designed for developers to connect, share knowledge, and showcase their projects. Built with **Golang** on the backend and **React** on the frontend, Wombat delivers high performance, scalability, and an engaging developer-centric experience.
+Fennec is a social platform designed for developers to connect, share knowledge, and showcase their projects. Built with **Golang** on the backend and **React** on the frontend, Fennec delivers high performance, scalability, and an engaging developer-centric experience.
 
 ---
 
@@ -34,7 +34,7 @@ Wombat is a social platform designed for developers to connect, share knowledge,
 
 ## **Getting Started**
 
-Follow these steps to set up Wombat locally on your machine.
+Follow these steps to set up Fennec locally on your machine.
 
 ### **Prerequisites**
 - **Node.js** and **npm** (for the frontend)
@@ -46,8 +46,8 @@ Follow these steps to set up Wombat locally on your machine.
 #### Clone the Repository
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/wombat.git
-   cd wombat
+   git clone https://github.com/yourusername/wennec.git
+   cd wennec
    ```
 
 #### Backend Setup
@@ -90,7 +90,7 @@ Follow these steps to set up Wombat locally on your machine.
 ## **Usage**
 
 Once the servers are running:
-1. Open your browser and navigate to: `http://localhost:5173` to access Wombat.
+1. Open your browser and navigate to: `http://localhost:5173` to access Fennec.
 2. Ensure the backend API is running at: `http://localhost:8080` if you want to use it with another database.
 
 ---
