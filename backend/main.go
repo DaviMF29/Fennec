@@ -7,6 +7,7 @@ import (
 	"github.com/DaviMF29/fennec/config"
 	_ "github.com/DaviMF29/fennec/docs"
 	"github.com/DaviMF29/fennec/routes"
+	"github.com/gorilla/handlers" // Pacote para configurar o CORS
 	"github.com/joho/godotenv"
 )
 
@@ -25,11 +26,17 @@ func main() {
 	initSecretKey()
 	router := routes.RegisterRoutes()
 
+	corsHandler := handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
+		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+		handlers.AllowCredentials(),
+	)
+
 	port := config.GetServerPort().Port
 	log.Printf("Servidor iniciado na porta %s", port)
-	log.Fatal(http.ListenAndServe(":"+port, router))
+	log.Fatal(http.ListenAndServe(":"+port, corsHandler(router)))
 }
-
 
 var SECRET_KEY []byte
 
