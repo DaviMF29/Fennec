@@ -1,10 +1,7 @@
 package models
 
 import (
-	"context"
 	"time"
-
-	"github.com/DaviMF29/wombat/db"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -17,43 +14,4 @@ type Post struct {
 	Likes     int                `bson:"likes" json:"likes"`
 	Comments  []Comment          `bson:"comments" json:"comments"`
 	Saves     int                `bson:"saves" json:"saves"`
-}
-
-func InsertPost(post Post) (id string, err error) {
-	client, err := db.OpenConnection()
-	if err != nil {
-		return "", err
-	}
-	defer client.Disconnect(context.Background())
-
-	collection := client.Database("wombat").Collection("posts")
-
-	post.CreatedAt = time.Now()
-	post.UpdatedAt = time.Now()
-
-	result, err := collection.InsertOne(context.Background(), post)
-	if err != nil {
-		return "", err
-	}
-
-	id = result.InsertedID.(primitive.ObjectID).Hex()
-	return id, nil
-}
-
-func GetPostById(id string) (post Post, err error) {
-	client, err := db.OpenConnection()
-	if err != nil {
-		return Post{}, err
-	}
-	defer client.Disconnect(context.Background())
-
-	collection := client.Database("wombat").Collection("posts")
-
-	post = Post{}
-	err = collection.FindOne(context.Background(), primitive.M{"_id": id}).Decode(&post)
-	if err != nil {
-		return Post{}, err
-	}
-
-	return post, nil
 }
