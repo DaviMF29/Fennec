@@ -3,6 +3,182 @@ import styled from "styled-components";
 import Logo from '../assets/iconProvisorio.png';
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
+import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
+
+function Login() {
+    const { t } = useTranslation();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [isRegister, setIsRegister] = useState(true);
+    const [isLightTheme, setIsLightTheme] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const theme = localStorage.getItem('theme');
+        setIsLightTheme(theme === 'white');
+    }, []);
+
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'none';
+
+        if (isRegister) {
+            if (!email || !password || !username || !repeatPassword) {
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorField');
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                return;
+            }
+            if (!email.includes('@') || !email.includes('.')) {
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorEmail');
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                return;
+            }
+            if (username.length < 3) {
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorUsername');
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                return;
+            }
+            if (password.length < 6) {
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorPasswordSize');
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                return;
+            }
+            if (password !== repeatPassword) {
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorPasswordMismatch');
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                return;
+            }
+
+            try {
+                const data = {
+                    birth_date: 'null',
+                    created_at: new Date().toISOString(),
+                    email,
+                    name: username,
+                    password,
+                    updated_at: new Date().toISOString(),
+                    username,
+                };
+
+                const response = await api.post('/user/', data);
+
+                if (response.status === 200) {
+                    console.log(response.data.message)
+                    localStorage.setItem('token', response.data.message || '');
+                    navigate('/')
+                }
+            } catch (error) {
+                if(!error.response){
+                    document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorBadrequest');
+                    document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                    console.log(error)
+                    return;
+                } else{
+                    if (error.response.status === 400) {
+                        document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorField');
+                        document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                    }
+                    if (error.response.status === 409) {
+                        document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorInUse');
+                        document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                    }
+                    else{
+                        document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorBadrequest');
+                        document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                        return;
+                    }
+                }
+            }
+        } else {
+            if (!email || !password) {
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorField');
+                document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                return;
+            }
+
+            try {
+                const data = { email, password };
+
+                const response = await api.post('/login', data);
+
+                if (response.status === 200) {
+                    console.log(response.data)
+                    localStorage.setItem('token', response.data.token || '');
+                    navigate('/')
+                }
+            } catch (error){
+                if (error.response.status === 401) {
+                    document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_invalidCredentials');
+                    document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                    return;
+                } else{
+                    document.querySelector(`.${ErrorLabel.styledComponentId}`).innerHTML = t('LOGIN_errorBadrequest');
+                    document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
+                    return;
+                }
+            }
+        }
+    };
+
+    const handleToggleRegister = () => setIsRegister(!isRegister);
+
+    return (
+        <BaseDiv>
+            <LinkComponent to={'/'}>
+                <LogoImage src={Logo} alt="Logo" $isLightTheme={isLightTheme} />
+            </LinkComponent>
+            <Container>
+                <LinkComponentMobile to={'/'}>
+                    <LogoImageMobile src={Logo} alt="Logo" $isLightTheme={isLightTheme}/>
+                </LinkComponentMobile>
+                <Title>{t("welcome")}</Title>
+                <Subtitle>
+                    {isRegister ? t("already_have_account") : t("new_here")}{' '}
+                    <Span onClick={handleToggleRegister}>
+                        {isRegister ? t("login") : t("create_account")}
+                    </Span>
+                </Subtitle>
+                <Form onSubmit={handleSubmit}>
+                    {isRegister && (
+                        <Input
+                            type="text"
+                            placeholder={t("username_placeholder")}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s/g, ''))}
+                        />
+                    )}
+                    <Input
+                        type="text"
+                        placeholder={t("email_placeholder")}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <Input
+                        type="password"
+                        placeholder={t("password_placeholder")}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {isRegister && (
+                        <Input
+                            type="password"
+                            placeholder={t("repeat_password_placeholder")}
+                            value={repeatPassword}
+                            onChange={(e) => setRepeatPassword(e.target.value)}
+                        />
+                    )}
+                    <ErrorLabel>{t("fill_all_fields")}</ErrorLabel>
+                    <Button type="submit">{isRegister ? t("register") : t("login")}</Button>
+                    <HelpText>{t("login_issues")}</HelpText>
+                </Form>
+            </Container>
+        </BaseDiv>
+    );
+}
 
 const Container = styled.div`
     display: flex;
@@ -167,83 +343,5 @@ const LinkComponentMobile = styled(Link)`
     width: auto;
     margin-inline: auto;
 `
-
-function Login() {
-    const { t } = useTranslation();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
-    const [isRegister, setIsRegister] = useState(true);
-    const [isLightTheme, setIsLightTheme] = useState(false);
-
-    useEffect(() => {
-        const theme = localStorage.getItem('theme');
-        setIsLightTheme(theme === 'white');
-    }, []);
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        if (!email || !password || (isRegister && (!username || !repeatPassword))) {
-            document.querySelector(`.${ErrorLabel.styledComponentId}`).style.display = 'block';
-            return;
-        }
-    };
-
-    const handleToggleRegister = () => setIsRegister(!isRegister);
-
-    return (
-        <BaseDiv>
-            <LinkComponent to={'/'}>
-                <LogoImage src={Logo} alt="Logo" isLightTheme={isLightTheme} />
-            </LinkComponent>
-            <Container>
-                <LinkComponentMobile to={'/'}>
-                    <LogoImageMobile src={Logo} alt="Logo" isLightTheme={isLightTheme}/>
-                </LinkComponentMobile>
-                <Title>{t("welcome")}</Title>
-                <Subtitle>
-                    {isRegister ? t("already_have_account") : t("new_here")}{' '}
-                    <Span onClick={handleToggleRegister}>
-                        {isRegister ? t("login") : t("create_account")}
-                    </Span>
-                </Subtitle>
-                <Form onSubmit={handleSubmit}>
-                    {isRegister && (
-                        <Input
-                            type="text"
-                            placeholder={t("username_placeholder")}
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s/g, ''))}
-                        />
-                    )}
-                    <Input
-                        type="text"
-                        placeholder={t("email_placeholder")}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                    <Input
-                        type="password"
-                        placeholder={t("password_placeholder")}
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {isRegister && (
-                        <Input
-                            type="password"
-                            placeholder={t("repeat_password_placeholder")}
-                            value={repeatPassword}
-                            onChange={(e) => setRepeatPassword(e.target.value)}
-                        />
-                    )}
-                    <ErrorLabel>{t("fill_all_fields")}</ErrorLabel>
-                    <Button type="submit">{isRegister ? t("register") : t("login")}</Button>
-                    <HelpText>{t("login_issues")}</HelpText>
-                </Form>
-            </Container>
-        </BaseDiv>
-    );
-}
 
 export default Login;

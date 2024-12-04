@@ -61,7 +61,7 @@ export default function Home() {
     };
 
     const goToLogin = () => {
-        navigate('/welcome');
+        navigate('/login');
     };
 
     return (
