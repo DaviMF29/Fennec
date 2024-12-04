@@ -5,8 +5,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/DaviMF29/wombat/db"
-	"github.com/DaviMF29/wombat/models"
+	"github.com/DaviMF29/fennec/db"
+	"github.com/DaviMF29/fennec/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
@@ -21,7 +21,7 @@ func InsertUser(user models.User) (id string, err error) {
 	}
 	defer client.Disconnect(context.Background())
 
-	collection := client.Database("wombat").Collection("users")
+	collection := client.Database("fennec").Collection("users")
 
 	encryptedPassword, err := encryptPassword(user.Password)
 	if err != nil {
@@ -47,7 +47,7 @@ func GetUserById(id string) (models.User, error) {
 	}
 	defer client.Disconnect(context.Background())
 
-	collection := client.Database("wombat").Collection("users")
+	collection := client.Database("fennec").Collection("users")
 
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -70,7 +70,7 @@ func GetUserByEmail(email string) (models.User, error) {
 	}
 	defer client.Disconnect(context.Background())
 
-	collection := client.Database("wombat").Collection("users")
+	collection := client.Database("fennec").Collection("users")
 
 	var user models.User
 	err = collection.FindOne(context.Background(), bson.M{"email": email}).Decode(&user)
@@ -87,7 +87,7 @@ func GetUserByUsername(username string) (models.User, error) {
 	}
 	defer client.Disconnect(context.Background())
 
-	collection := client.Database("wombat").Collection("users")
+	collection := client.Database("fennec").Collection("users")
 
 	var user models.User
 	err = collection.FindOne(context.Background(), bson.M{"username": username}).Decode(&user)

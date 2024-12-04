@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DaviMF29/wombat/config"
+	"github.com/DaviMF29/fennec/config"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
