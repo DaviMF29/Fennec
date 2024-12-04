@@ -8,9 +8,17 @@
     "email_placeholder": "Email",
     "password_placeholder": "Senha",
     "repeat_password_placeholder": "Repetir senha",
-    "fill_all_fields": "Por favor, preencha todos os campos.",
     "login_issues": "Problemas com login?",
     "register": "Cadastrar",
     "toggle_theme": "Mudar tema",
-    "go_to_login": "Ir para login"
+    "go_to_login": "Ir para login",
+
+    "LOGIN_errorField": "Preencha todos os campos.",
+    "LOGIN_errorEmail": "Insira um email válido.",
+    "LOGIN_errorUsername": "O nome de usuário deve ter pelo menos 3 caracteres.",
+    "LOGIN_errorPasswordSize": "A senha deve ter pelo menos 6 caracteres.",
+    "LOGIN_errorPasswordMismatch": "As senhas inseridas não coincidem.",
+    "LOGIN_errorInUse": "Este email ou nome de usuário já está sendo utilizado.",
+    "LOGIN_errorBadrequest": "Erro na solicitação. Veja o console.",
+    "LOGIN_invalidCredentials": "Credenciais inválidas. Verifique o email e a senha."
 }

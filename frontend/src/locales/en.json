@@ -8,9 +8,17 @@
     "email_placeholder": "Email",
     "password_placeholder": "Password",
     "repeat_password_placeholder": "Repeat Password",
-    "fill_all_fields": "Please fill all fields.",
     "login_issues": "Having issues logging in?",
     "register": "Register",
     "toggle_theme": "Change theme",
-    "go_to_login": "Go to login"
+    "go_to_login": "Go to login",
+
+    "LOGIN_errorField": "Please fill in all required fields.",
+    "LOGIN_errorEmail": "Enter a valid email address.",
+    "LOGIN_errorUsername": "Username must be at least 3 characters long.",
+    "LOGIN_errorPasswordSize": "Password must be at least 6 characters long.",
+    "LOGIN_errorPasswordMismatch": "The passwords entered do not match.",
+    "LOGIN_errorInUse": "This email or username is already in use.",
+    "LOGIN_errorBadrequest": "Request error. Check the console for more details.",
+    "LOGIN_invalidCredentials": "Invalid credentials. Please check your email and password."
 }
