@@ -27,18 +27,21 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userDataByEmail, err := repository.GetUserByEmail(user.Email)
+
     if err == nil && userDataByEmail.Email != "" {
 		utils.SendErrorResponse(w, "Email already exists")
         return
     }
 
     userDataByUsername, err := repository.GetUserByUsername(user.Username)
+
     if err == nil && userDataByUsername.Username != "" {
 		utils.SendErrorResponse(w, "Username already exists")
         return
     }
 
 	id, err := repository.InsertUser(user)
+
 	if err != nil {
 		utils.SendErrorResponse(w, "Error inserting user")
 		return
@@ -54,7 +57,9 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+
 	user, err := repository.GetUserById(id)
+
 	if err != nil {
 		utils.SendErrorResponse(w, "Error getting user")
 		return

@@ -7,9 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/DaviMF29/wombat/models"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/joho/godotenv"
+github.com/joho/godotenv"
 )
 
 var SECRET_KEY []byte

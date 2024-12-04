@@ -1,6 +1,7 @@
 package models
 
 import (
+
 	"time"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -15,3 +16,4 @@ type Post struct {
 	Comments  []Comment          `bson:"comments" json:"comments"`
 	Saves     int                `bson:"saves" json:"saves"`
 }
+
