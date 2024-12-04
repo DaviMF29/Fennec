@@ -15,9 +15,16 @@ import (
 var SECRET_KEY []byte
 
 func init() {
-	err := godotenv.Load(".env") 
+	env := os.Getenv("ENV")
+
+	if env == "production" {
+		log.Println("Running in production mode. Skipping .env loading.")
+		return
+	}
+
+	err := godotenv.Load(".env")
 	if err != nil {
-		log.Fatalf("Erro ao carregar o arquivo .env: %v", err)
+		log.Fatalf("Error loading .env file: %v", err)
 	}
 
 	SECRET_KEY = []byte(os.Getenv("SECRET_KEY"))
