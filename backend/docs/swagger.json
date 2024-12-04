@@ -6,7 +6,7 @@
         "contact": {},
         "version": "1.0"
     },
-    "host": "https://wombat-production-e2c6.up.railway.app/",
+    "host": "https://wombat-production-e2c6.up.railway.app",
     "basePath": "/api",
     "paths": {
         "/api/login": {
