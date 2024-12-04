@@ -51,7 +51,7 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-	id, err := repository.InsertUser(user)
+	_, err = repository.InsertUser(user)
 
 	if err != nil {
 		utils.SendErrorResponse(w, "Error inserting user")
@@ -64,8 +64,8 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.SendSuccessResponse(w, fmt.Sprintf("User inserted with ID: %s:",id))
-	utils.SendSuccessResponse(w, fmt.Sprintf("Token: %s:",token))
+	utils.SendSuccessResponse(w, token)
+
 }
 
 // @Summary Get a user by ID
