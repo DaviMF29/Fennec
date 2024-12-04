@@ -46,7 +46,7 @@ Follow these steps to set up Fennec locally on your machine.
 #### Clone the Repository
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/wennec.git
+   git clone https://github.com/davimf29/wennec.git
    cd wennec
    ```
 
