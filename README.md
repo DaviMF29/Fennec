@@ -23,6 +23,7 @@ Fennec is a social platform designed for developers to connect, share knowledge,
 - **MongoDB**: Scalable and reliable NoSQL database.
 - **Redis**: Real-time caching and data management.
 - **JWT Authentication**: Secure and modern authentication.
+- **Swagger**: API documentation for easy integration and testing.
 
 ### **Frontend**
 - **React**: Modern and dynamic user interfaces.
@@ -112,3 +113,4 @@ We welcome contributions from the community! To contribute:
    git push origin feature/your-feature-name
    ```
 5. Create a Pull Request.
+
