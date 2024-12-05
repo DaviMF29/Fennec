@@ -10,7 +10,8 @@ func RegisterUserRoutes() *chi.Mux {
 	r := chi.NewRouter()
 
 	r.Get("/{id}", handlers.GetUserHandler)    
-	r.Post("/", handlers.InsertUserHandler)    
+	r.Post("/", handlers.InsertUserHandler)
+	r.Delete("/{id}", handlers.DeleteUserHandler)    
 
 	return r
 }

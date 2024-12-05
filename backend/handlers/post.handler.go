@@ -92,3 +92,48 @@ func GetPostByIdHandler(w http.ResponseWriter, r *http.Request) {
 
 	utils.SendSuccessResponse(w, fmt.Sprintf("Post: %v", post))
 }
+
+// @Summary Delete a post by ID
+// @Description Deletes a post based on the provided post ID.
+// @Tags Posts
+// @Accept json
+// @Produce json
+// @Param id path string true "Post ID"
+// @Success 200 {string} string "Post deleted successfully"
+// @Failure 400 {object} map[string]string "Bad request - Missing ID"
+// @Failure 404 {object} map[string]string "Not found - Post not found"
+// @Failure 500 {object} map[string]string "Internal server error - Unable to delete post"
+// @Router /api/post/{id} [delete]
+func DeletePostByIdHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		utils.SendErrorResponse(w, "Missing ID in request")
+		return
+	}
+
+	userID, err := utils.ExtractUserIdFromRequest(r)
+	if err != nil {
+		utils.SendErrorResponse(w, "Error getting user ID from token")
+		return
+	}
+
+	post, err := repository.GetPostById(id)
+	if err != nil {
+		utils.SendErrorResponse(w, "Error getting post")
+		return
+	}
+
+	if userID != post.UserID {
+		utils.SendErrorResponse(w, "Unauthorized - User does not own post")
+		return
+	}
+
+	err = repository.DeletePostById(id)
+
+	if err != nil {
+		utils.SendErrorResponse(w, "Error deleting post")
+		return
+	}
+
+	utils.SendSuccessResponse(w, "Post deleted successfully")
+}

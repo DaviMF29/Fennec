@@ -3,6 +3,8 @@ package utils
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/DaviMF29/fennec/models"
@@ -48,4 +50,25 @@ func GetUserIDFromToken(tokenString string) (string, error) {
     }
 
     return userId, nil
+}
+
+func ExtractUserIdFromRequest(r *http.Request) (string, error) {
+	tokenHeader := r.Header.Get("Authorization")
+	if tokenHeader == "" {
+		return "", errors.New("token not provided")
+	}
+
+	var tokenString string
+	if strings.HasPrefix(tokenHeader, "Bearer ") {
+		tokenString = strings.TrimPrefix(tokenHeader, "Bearer ")
+	} else {
+		return "", errors.New("invalid token format")
+	}
+
+	userId, err := GetUserIDFromToken(tokenString)
+	if err != nil {
+		return "", errors.New("error getting user ID from token")
+	}
+
+	return userId, nil
 }

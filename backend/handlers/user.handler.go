@@ -96,3 +96,42 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	utils.SendSuccessResponse(w, fmt.Sprintf("User: %v", user))
 }
+
+// @Summary Delete a user by ID
+// @Description Deletes a user based on the provided user ID.
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {string} string "User deleted successfully"
+// @Failure 400 {object} map[string]string "Bad request - Missing ID"
+// @Failure 404 {object} map[string]string "Not found - User not found"
+// @Failure 500 {object} map[string]string "Internal server error - Unable to delete user"
+// @Router /api/user/{id} [delete]
+func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		utils.SendErrorResponse(w, "Missing ID in request")
+		return
+	}
+
+	userID, err := utils.ExtractUserIdFromRequest(r)
+	if err != nil {
+		utils.SendErrorResponse(w, "Error getting user ID from token")
+		return
+	}
+
+	if id != userID {
+		utils.SendErrorResponse(w, "Unauthorized")
+		return
+	}
+	
+	err = repository.DeleteUserById(id)
+	if err != nil {
+		utils.SendErrorResponse(w, "Error deleting user")
+		return
+	}
+
+	utils.SendSuccessResponse(w, "User deleted successfully")
+}
+

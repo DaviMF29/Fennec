@@ -40,7 +40,6 @@ func GetPostById(id string) (models.Post, error) {
 
 	collection := client.Database("fennec").Collection("posts")
 
-	// Converter ID para ObjectID
 	objectID, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return models.Post{}, errors.New("ID inválido")
@@ -53,4 +52,26 @@ func GetPostById(id string) (models.Post, error) {
 	}
 
 	return post, nil
+}
+
+func DeletePostById(id string) error {
+	client, err := db.OpenConnection()
+	if err != nil {
+		return err
+	}
+	defer client.Disconnect(context.Background())
+
+	collection := client.Database("fennec").Collection("posts")
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.New("ID inválido")
+	}
+
+	_, err = collection.DeleteOne(context.Background(), bson.M{"_id": objectID})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
