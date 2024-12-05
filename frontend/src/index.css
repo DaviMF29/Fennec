@@ -1,17 +1,19 @@
 :root {
   --color-background: #000014;
   --color-primary: #0d0d20;
-  --color-secondary: #1a1a2c;
+  --color-secondary: #2a2a40;
+  --color-tertiary: #1a1a2c;
   --color-text-primary: #ffffff;
-  --color-wombat: #6e54b5;
+  --color-fennect: #6e54b5;
 }
 
 .theme-white {
   --color-background: #ffffff;
   --color-primary: #f7f7f7;
   --color-secondary: #ededed;
+  --color-tertiary: #dcdcdc;
   --color-text-primary: #000014;
-  --color-wombat: #6e54b5;
+  --color-fennect: #6e54b5;
 }
 
 * {

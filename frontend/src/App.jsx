@@ -3,7 +3,15 @@ import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import './i18n';
 import Home from "./pages/Home";
-import Welcome from "./pages/Login";
+import Login from "./pages/Login";
+
+import LayoutContainer from './components/layout/LayoutContainer';
+import LayoutTopBar from './components/layout/LayoutTopBar';
+import LayoutMainArea from './components/layout/LayoutMainArea';
+import LayoutSideNavbar from './components/layout/LayoutSideNavbar';
+import LayoutSideContent from './components/layout/LayoutSideContent';
+import LayoutRouteArea from './components/layout/LayoutRouteArea';
+import LayoutBottomBar from './components/layout/LayoutBottomBar';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -26,9 +34,27 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="*" element={<AppLayout />} />
       </Routes>
     </BrowserRouter>
+  );
+}
+
+function AppLayout() {
+  return (
+    <LayoutContainer>
+      <LayoutTopBar />
+      <LayoutMainArea>
+        <LayoutSideNavbar/>
+        <LayoutSideContent />
+        <LayoutRouteArea>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </LayoutRouteArea>
+      </LayoutMainArea>
+      <LayoutBottomBar />
+    </LayoutContainer>
   );
 }
