@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import { RiHome2Fill } from "react-icons/ri";
-import { MdAccountCircle, MdSettings, MdOutlineSearch, MdGroup } from "react-icons/md";
+import { MdAccountCircle, MdSettings, MdSearch, MdGroup, MdNotifications } from "react-icons/md";
 import { BiSolidMessageRounded } from "react-icons/bi";
 import ButtonSideNavbar from "./ButtonSideNavbar";
 
@@ -15,11 +15,12 @@ const LayoutSideNavbar = () => {
                     Icon={RiHome2Fill}
                     active={location.pathname === "/"}
                     label="Home"
+                    badgeNum={0}
                 />
             </Link>
             <Link to="/search">
                 <ButtonSideNavbar
-                    Icon={MdOutlineSearch }
+                    Icon={MdSearch }
                     active={location.pathname === "/search"}
                     label="Search"
                 />
@@ -28,6 +29,14 @@ const LayoutSideNavbar = () => {
                 <ButtonSideNavbar
                     Icon={BiSolidMessageRounded}
                     active={location.pathname === "/messages"}
+                    badgeNum={2}
+                />
+            </Link>
+            <Link to="/notifications">
+                <ButtonSideNavbar
+                    Icon={MdNotifications}
+                    active={location.pathname === "/notifications"}
+                    badgeNum={5}
                 />
             </Link>
             <Link to="/groups">
@@ -64,6 +73,7 @@ const SideNavbarContainer = styled.div`
     background-color: var(--color-secondary);
     height: 100%;
     width: 70px;
+    min-width: 60px;
     display: flex;
     flex-direction: column;
     justify-content: start;

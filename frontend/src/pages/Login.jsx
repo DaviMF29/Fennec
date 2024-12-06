@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styled from "styled-components";
-import Logo from '../assets/iconProvisorio.png';
+import IconComponent from '../components/IconComponent'
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
 import api from '../services/api';
@@ -13,14 +13,7 @@ function Login() {
     const [username, setUsername] = useState('');
     const [repeatPassword, setRepeatPassword] = useState('');
     const [isRegister, setIsRegister] = useState(true);
-    const [isLightTheme, setIsLightTheme] = useState(false);
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const theme = localStorage.getItem('theme');
-        setIsLightTheme(theme === 'white');
-    }, []);
-
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -129,11 +122,11 @@ function Login() {
     return (
         <BaseDiv>
             <LinkComponent to={'/'}>
-                <LogoImage src={Logo} alt="Logo" $isLightTheme={isLightTheme} />
+                <IconComponent height={'23vw'} width={'23vw'} fill={'var(--color-text-primary)'}/>
             </LinkComponent>
             <Container>
                 <LinkComponentMobile to={'/'}>
-                    <LogoImageMobile src={Logo} alt="Logo" $isLightTheme={isLightTheme}/>
+                    <IconComponent height={'50px'} width={'50px'} fill={'var(--color-text-primary)'}/>
                 </LinkComponentMobile>
                 <Title>{t("welcome")}</Title>
                 <Subtitle>
@@ -217,7 +210,7 @@ const Subtitle = styled.p`
     margin-bottom: 30px;
 
     span {
-        color: var(--color-wombat);
+        color: var(--color-accent);
         cursor: pointer;
         transition: all 0.3s;
 
@@ -261,7 +254,7 @@ const ErrorLabel = styled.h4`
 `;
 
 const Button = styled.button`
-    background-color: var(--color-wombat);
+    background-color: var(--color-secondary);
     border-radius: 10px;
     width: 100%;
     padding: 15px;
@@ -288,38 +281,19 @@ const HelpText = styled.h3`
     opacity: 0.7;
 
     &:hover {
-        color: var(--color-wombat);
+        color: var(--color-accent);
         cursor: pointer;
     }
 `;
 
 const Span = styled.span`
-    color: var(--color-wombat);
+    color: var(--color-accent);
 `
 
 const BaseDiv = styled.div`
     display: flex;
     flex-direction: row;
     width: 100%;
-`;
-
-const LogoImage = styled.img`
-    width: 23vw;
-    height: 23vw;
-    filter: ${(props) => (props.isLightTheme ? 'invert(95%)' : 'none')};
-`;
-
-const LogoImageMobile = styled.img`
-    height: 50px;
-    margin-right: auto;
-    margin-inline: auto;
-    display: none;
-    margin-bottom: 25px;
-
-    @media (max-width: 1000px) {
-        display: flex;
-        filter: ${(props) => (props.isLightTheme ? 'invert(95%)' : 'none')};
-    }
 `;
 
 const LinkComponent = styled(Link)`
@@ -342,6 +316,12 @@ const LinkComponentMobile = styled(Link)`
     margin-block: auto;
     width: auto;
     margin-inline: auto;
+    padding-bottom: 20px;
+    display: none;
+
+    @media (max-width: 1000px) {
+        display: flex;
+    }
 `
 
 export default Login;

@@ -1,10 +1,10 @@
 :root {
-  --color-background: #000014;
-  --color-primary: #0d0d20;
-  --color-secondary: #2a2a40;
-  --color-tertiary: #1a1a2c;
+  --color-background: #353540;
+  --color-primary: #2b2b36;
+  --color-secondary: #21222c;
+  --color-tertiary: #15151b;
   --color-text-primary: #ffffff;
-  --color-fennect: #6e54b5;
+  --color-accent: #00ba7c;
 }
 
 .theme-white {
@@ -13,11 +13,11 @@
   --color-secondary: #ededed;
   --color-tertiary: #dcdcdc;
   --color-text-primary: #000014;
-  --color-fennect: #6e54b5;
+  --color-accent: #00ba7c;
 }
 
 * {
-  font-family: montserrat, sans-serif;
+  font-family: "IBM Plex Mono", montserrat, sans-serif;
   margin: 0;
   padding: 0;
   color: var(--color-text-primary);

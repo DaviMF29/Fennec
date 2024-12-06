@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import './i18n';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Search from "./pages/Search";
 
 import LayoutContainer from './components/layout/LayoutContainer';
 import LayoutTopBar from './components/layout/LayoutTopBar';
@@ -51,6 +52,7 @@ function AppLayout() {
         <LayoutRouteArea>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/search" element={<Search />} />
           </Routes>
         </LayoutRouteArea>
       </LayoutMainArea>
