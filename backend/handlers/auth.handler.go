@@ -11,16 +11,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// @Summary User login
-// @Description Authenticates a user using their email and password, returning a JWT token upon success.
-// @Tags Authentication
-// @Accept json
-// @Produce json
-// @Param loginData body models.LoginData true "Login data"
-// @Success 200 {object} map[string]string "JWT token"
-// @Failure 400 {object} map[string]string "Bad request"
-// @Failure 401 {object} map[string]string "Unauthorized"
-// @Router /api/login [post]
+//	@Summary		User login
+//	@Description	Authenticates a user using their email and password, returning a JWT token upon success.
+//	@Tags			Authentication
+//	@Accept			json
+//	@Produce		json
+//	@Param			loginData	body		models.LoginData	true	"Login data"
+//	@Success		200			{object}	map[string]string	"JWT token"
+//	@Failure		400			{object}	map[string]string	"Bad request"
+//	@Failure		401			{object}	map[string]string	"Unauthorized"
+//	@Router			/api/login [post]
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var loginData models.LoginData
 

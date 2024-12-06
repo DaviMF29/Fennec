@@ -151,6 +151,44 @@ paths:
       tags:
       - Posts
   /api/post/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a post based on the provided post ID.
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request - Missing ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found - Post not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to delete post
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a post by ID
+      tags:
+      - Posts
     get:
       consumes:
       - application/json
@@ -225,6 +263,44 @@ paths:
       tags:
       - Users
   /api/user/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user based on the provided user ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request - Missing ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found - User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to delete user
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a user by ID
+      tags:
+      - Users
     get:
       consumes:
       - application/json
@@ -261,6 +337,62 @@ paths:
               type: string
             type: object
       summary: Get a user by ID
+      tags:
+      - Users
+    put:
+      consumes:
+      - application/json
+      description: Updates a user based on the provided user ID.
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User data
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request - Missing ID or invalid JSON
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden - Unauthorized to update these fields
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found - User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Conflict - Email or username already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to update user
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a user by ID
       tags:
       - Users
 swagger: "2.0"

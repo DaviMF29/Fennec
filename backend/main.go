@@ -11,11 +11,11 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// @title API Fennec
-// @version 1.0
-// @description Fennec is a social platform designed for developers to connect, share knowledge, and showcase their projects. Built with Golang on the backend and React on the frontend, Fennec delivers high performance, scalability, and an engaging developer-centric experience.
-// @host https://wombat-production-e2c6.up.railway.app/
-// @BasePath /api
+//	@title			API Fennec
+//	@version		1.0
+//	@description	Fennec is a social platform designed for developers to connect, share knowledge, and showcase their projects. Built with Golang on the backend and React on the frontend, Fennec delivers high performance, scalability, and an engaging developer-centric experience.
+//	@host			https://wombat-production-e2c6.up.railway.app/
+//	@BasePath		/api
 
 func main() {
 	err := config.Load()

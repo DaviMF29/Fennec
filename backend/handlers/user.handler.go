@@ -11,17 +11,17 @@ import (
 	"github.com/DaviMF29/fennec/utils"
 )
 
-// @Summary Create a new user
-// @Description Creates a new user with the provided details if the email and username are unique.
-// @Tags Users
-// @Accept json
-// @Produce json
-// @Param user body models.User true "User data"
-// @Success 201 {string} string "User inserted successfully with ID"
-// @Failure 400 {object} map[string]string "Bad request - Missing fields or invalid JSON"
-// @Failure 409 {object} map[string]string "Conflict - Email or username already exists"
-// @Failure 500 {object} map[string]string "Internal server error - Unable to insert user"
-// @Router /api/user [post]
+//	@Summary		Create a new user
+//	@Description	Creates a new user with the provided details if the email and username are unique.
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		models.User			true	"User data"
+//	@Success		201		{string}	string				"User inserted successfully with ID"
+//	@Failure		400		{object}	map[string]string	"Bad request - Missing fields or invalid JSON"
+//	@Failure		409		{object}	map[string]string	"Conflict - Email or username already exists"
+//	@Failure		500		{object}	map[string]string	"Internal server error - Unable to insert user"
+//	@Router			/api/user [post]
 func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 
@@ -64,17 +64,17 @@ func InsertUserHandler(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, http.StatusCreated, token)
 }
 
-// @Summary Get a user by ID
-// @Description Retrieves a user based on the provided user ID.
-// @Tags Users
-// @Accept json
-// @Produce json
-// @Param id path string true "User ID"
-// @Success 200 {object} models.User "User details"
-// @Failure 400 {object} map[string]string "Bad request - Missing ID"
-// @Failure 404 {object} map[string]string "Not found - User not found"
-// @Failure 500 {object} map[string]string "Internal server error - Unable to retrieve user"
-// @Router /api/user/{id} [get]
+//	@Summary		Get a user by ID
+//	@Description	Retrieves a user based on the provided user ID.
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string				true	"User ID"
+//	@Success		200	{object}	models.User			"User details"
+//	@Failure		400	{object}	map[string]string	"Bad request - Missing ID"
+//	@Failure		404	{object}	map[string]string	"Not found - User not found"
+//	@Failure		500	{object}	map[string]string	"Internal server error - Unable to retrieve user"
+//	@Router			/api/user/{id} [get]
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
@@ -92,17 +92,17 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 
-// @Summary Delete a user by ID
-// @Description Deletes a user based on the provided user ID.
-// @Tags Users
-// @Accept json
-// @Produce json
-// @Param id path string true "User ID"
-// @Success 200 {string} string "User deleted successfully"
-// @Failure 400 {object} map[string]string "Bad request - Missing ID"
-// @Failure 404 {object} map[string]string "Not found - User not found"
-// @Failure 500 {object} map[string]string "Internal server error - Unable to delete user"
-// @Router /api/user/{id} [delete]
+//	@Summary		Delete a user by ID
+//	@Description	Deletes a user based on the provided user ID.
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string				true	"User ID"
+//	@Success		200	{string}	string				"User deleted successfully"
+//	@Failure		400	{object}	map[string]string	"Bad request - Missing ID"
+//	@Failure		404	{object}	map[string]string	"Not found - User not found"
+//	@Failure		500	{object}	map[string]string	"Internal server error - Unable to delete user"
+//	@Router			/api/user/{id} [delete]
 func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
@@ -131,19 +131,19 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //@Summary Update a user by ID
-// @Description Updates a user based on the provided user ID.
-// @Tags Users
-// @Accept json
-// @Produce json
-// @Param id path string true "User ID"
-// @Param user body models.User true "User data"
-// @Success 200 {string} string "User updated successfully"
-// @Failure 400 {object} map[string]string "Bad request - Missing ID or invalid JSON"
-// @Failure 403 {object} map[string]string "Forbidden - Unauthorized to update these fields"
-// @Failure 404 {object} map[string]string "Not found - User not found"
-// @Failure 409 {object} map[string]string "Conflict - Email or username already exists"
-// @Failure 500 {object} map[string]string "Internal server error - Unable to update user"
-// @Router /api/user/{id} [put]
+//	@Description	Updates a user based on the provided user ID.
+//	@Tags			Users
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path		string				true	"User ID"
+//	@Param			user	body		models.User			true	"User data"
+//	@Success		200		{string}	string				"User updated successfully"
+//	@Failure		400		{object}	map[string]string	"Bad request - Missing ID or invalid JSON"
+//	@Failure		403		{object}	map[string]string	"Forbidden - Unauthorized to update these fields"
+//	@Failure		404		{object}	map[string]string	"Not found - User not found"
+//	@Failure		409		{object}	map[string]string	"Conflict - Email or username already exists"
+//	@Failure		500		{object}	map[string]string	"Internal server error - Unable to update user"
+//	@Router			/api/user/{id} [put]
 func UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
