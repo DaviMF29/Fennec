@@ -141,6 +141,20 @@ func DeletePostByIdHandler(w http.ResponseWriter, r *http.Request) {
 	utils.SendSuccessResponse(w, http.StatusOK, "Post deleted successfully")
 }
 
+//	@Summary		Update a post by ID
+//	@Description	Updates a post based on the provided post ID.
+//	@Tags			Posts
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string				true	"Post ID"
+//	@Param			Authorization	header		string				true	"Bearer token
+//	@Param			post			body		models.Post			true	"Post data"
+//	@Success		200	{string}	string				"Post updated successfully"
+//	@Failure		400	{object}	map[string]string	"Bad request - Missing ID or fields in request"
+//	@Failure		403	{object}	map[string]string	"Forbidden - User does not own post"
+//	@Failure		404	{object}	map[string]string	"Not found - Post not found"
+//	@Failure		500	{object}	map[string]string	"Internal server error - Unable to update post"
+//	@Router			/api/post/{id} [put]
 func UpdatePostHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
