@@ -75,3 +75,25 @@ func DeletePostById(id string) error {
 
 	return nil
 }
+
+func UpdatePost(id string,post models.Post) error {
+	client, err := db.OpenConnection()
+	if err != nil {
+		return err
+	}
+
+	defer client.Disconnect(context.Background())
+
+	collection := client.Database("fennec").Collection("posts")
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+
+	post.UpdatedAt = time.Now()
+
+	_,err = collection.UpdateOne(context.Background(), bson.M{"_id": objectID}, bson.M{"$set": post})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

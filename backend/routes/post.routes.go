@@ -11,5 +11,6 @@ func RegisterPostRoutes() *chi.Mux {
 	r.Post("/", handlers.InsertPostHandler)
 	r.Get("/{id}", handlers.GetPostByIdHandler)
 	r.Delete("/{id}", handlers.DeletePostByIdHandler)
+	r.Patch("/{id}", handlers.UpdatePostHandler)
 	return r
 }

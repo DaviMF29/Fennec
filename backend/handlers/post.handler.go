@@ -29,13 +29,19 @@ func InsertPostHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
-		utils.SendErrorResponse(w, "Error decoding JSON")
-	}
-	
-	if post.Content == "" {
-        utils.SendErrorResponse(w, "Missing fields in request")
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Error decoding JSON")
 		return
-    }
+	}
+
+	if post.Content == "" {
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Missing fields in request")
+		return
+	}
+
+	if len(post.Content) > 300 {
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Content too long")
+		return
+	}
 
 	tokenHeader := r.Header.Get("Authorization")
 	var tokenString string
@@ -43,27 +49,27 @@ func InsertPostHandler(w http.ResponseWriter, r *http.Request) {
 	if strings.HasPrefix(tokenHeader, "Bearer ") {
 		tokenString = strings.TrimPrefix(tokenHeader, "Bearer ")
 	} else {
-		utils.SendErrorResponse(w, "Token not provided")
+		utils.SendErrorResponse(w, http.StatusUnauthorized, "Token not provided")
 		return
 	}
 
 	userId, err := utils.GetUserIDFromToken(tokenString)
 	if err != nil {
-		utils.SendErrorResponse(w, "Error getting user ID from token")
+		utils.SendErrorResponse(w, http.StatusUnauthorized, "Error getting user ID from token")
 		return
 	}
 
 	post.UserID = userId
 
 	id, err := repository.InsertPost(post)
-
 	if err != nil {
-		utils.SendErrorResponse(w, "Error inserting post")
+		utils.SendErrorResponse(w, http.StatusInternalServerError, "Error inserting post")
 		return
 	}
 
-	utils.SendSuccessResponse(w, fmt.Sprintf("Post inserted with ID: %s", id))
+	utils.SendSuccessResponse(w, http.StatusCreated, fmt.Sprintf("Post inserted with ID: %s", id))
 }
+
 
 // @Summary Get a post by ID
 // @Description Retrieves a specific post by its unique ID.
@@ -78,19 +84,17 @@ func InsertPostHandler(w http.ResponseWriter, r *http.Request) {
 func GetPostByIdHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
-		utils.SendErrorResponse(w, "Missing ID in request")
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Missing ID in request")
 		return
 	}
-
 
 	post, err := repository.GetPostById(id)
-
 	if err != nil {
-		utils.SendErrorResponse(w, "Error getting post")
+		utils.SendErrorResponse(w, http.StatusNotFound, "Error getting post")
 		return
 	}
 
-	utils.SendSuccessResponse(w, fmt.Sprintf("Post: %v", post))
+	utils.SendSuccessResponse(w, http.StatusOK, fmt.Sprintf("Post: %v", post))
 }
 
 // @Summary Delete a post by ID
@@ -107,33 +111,80 @@ func GetPostByIdHandler(w http.ResponseWriter, r *http.Request) {
 func DeletePostByIdHandler(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	if id == "" {
-		utils.SendErrorResponse(w, "Missing ID in request")
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Missing ID in request")
 		return
 	}
 
 	userID, err := utils.ExtractUserIdFromRequest(r)
 	if err != nil {
-		utils.SendErrorResponse(w, "Error getting user ID from token")
+		utils.SendErrorResponse(w, http.StatusUnauthorized, "Error getting user ID from token")
 		return
 	}
 
 	post, err := repository.GetPostById(id)
 	if err != nil {
-		utils.SendErrorResponse(w, "Error getting post")
+		utils.SendErrorResponse(w, http.StatusNotFound, "Error getting post")
 		return
 	}
 
 	if userID != post.UserID {
-		utils.SendErrorResponse(w, "Unauthorized - User does not own post")
+		utils.SendErrorResponse(w, http.StatusForbidden, "Unauthorized - User does not own post")
 		return
 	}
 
 	err = repository.DeletePostById(id)
-
 	if err != nil {
-		utils.SendErrorResponse(w, "Error deleting post")
+		utils.SendErrorResponse(w, http.StatusInternalServerError, "Error deleting post")
 		return
 	}
 
-	utils.SendSuccessResponse(w, "Post deleted successfully")
+	utils.SendSuccessResponse(w, http.StatusOK, "Post deleted successfully")
+}
+
+func UpdatePostHandler(w http.ResponseWriter, r *http.Request) {
+	id := chi.URLParam(r, "id")
+	if id == "" {
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Missing ID in request")
+		return
+	}
+
+	var newDataPost models.Post
+
+	err := json.NewDecoder(r.Body).Decode(&newDataPost)
+	if err != nil {
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Error decoding JSON")
+		return
+	}
+
+	if newDataPost.Content == "" {
+		utils.SendErrorResponse(w, http.StatusBadRequest, "Missing fields in request")
+		return
+	}
+
+	userID, err := utils.ExtractUserIdFromRequest(r)
+	if err != nil {
+		utils.SendErrorResponse(w, http.StatusUnauthorized, "Error getting user ID from token")
+		return
+	}
+
+	existingPost, err := repository.GetPostById(id)
+	if err != nil {
+		utils.SendErrorResponse(w, http.StatusNotFound, "Post not found")
+		return
+	}
+
+	if userID != existingPost.UserID {
+		utils.SendErrorResponse(w, http.StatusForbidden, "Unauthorized - User does not own post")
+		return
+	}
+
+	existingPost.Content = newDataPost.Content
+
+	err = repository.UpdatePost(id, existingPost)
+	if err != nil {
+		utils.SendErrorResponse(w, http.StatusInternalServerError, "Error updating post")
+		return
+	}
+
+	utils.SendSuccessResponse(w, http.StatusOK, "Post updated successfully")
 }

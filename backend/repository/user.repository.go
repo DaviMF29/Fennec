@@ -119,6 +119,30 @@ func DeleteUserById(id string) error {
 	return nil
 }
 
+func UpdateUserById(id string, user models.User) error {
+	client, err := db.OpenConnection()
+	if err != nil {
+		return err
+	}
+	defer client.Disconnect(context.Background())
+
+	collection := client.Database("fennec").Collection("users")
+
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return errors.New("ID inválido")
+	}
+
+	user.UpdatedAt = time.Now()
+
+	_, err = collection.UpdateOne(context.Background(), bson.M{"_id": objectID}, bson.M{"$set": user})
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func encryptPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	return string(bytes), err

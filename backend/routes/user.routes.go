@@ -11,7 +11,8 @@ func RegisterUserRoutes() *chi.Mux {
 
 	r.Get("/{id}", handlers.GetUserHandler)    
 	r.Post("/", handlers.InsertUserHandler)
-	r.Delete("/{id}", handlers.DeleteUserHandler)    
+	r.Delete("/{id}", handlers.DeleteUserHandler)
+	r.Patch("/{id}", handlers.UpdateUserHandler)    
 
 	return r
 }
