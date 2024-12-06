@@ -72,7 +72,7 @@ const Spacer = styled.div`
 const SideNavbarContainer = styled.div`
     background-color: var(--color-secondary);
     height: 100%;
-    width: 70px;
+    width: 60px;
     min-width: 60px;
     display: flex;
     flex-direction: column;
