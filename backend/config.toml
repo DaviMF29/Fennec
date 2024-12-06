@@ -1,5 +1,0 @@
-[api]
-port = "8080"
-
-[db]
-uri = "mongodb://localhost:27017"  # Valor genérico para desenvolvimento local
