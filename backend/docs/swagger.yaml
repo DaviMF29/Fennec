@@ -221,6 +221,61 @@ paths:
       summary: Get a post by ID
       tags:
       - Posts
+    put:
+      consumes:
+      - application/json
+      description: Updates a post based on the provided post ID.
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Post data
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Post updated successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request - Missing ID or fields in request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden - User does not own post
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not found - Post not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error - Unable to update post
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a post by ID
+      tags:
+      - Posts
   /api/user:
     post:
       consumes:
