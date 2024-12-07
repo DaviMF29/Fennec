@@ -6,6 +6,7 @@ const LayoutMainArea = styled.div`
     background-color: var(--color-primary);
     display: flex;
     flex-direction: row;
+    overflow-y: hidden;
 `;
 
 export default LayoutMainArea;

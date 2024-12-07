@@ -1,5 +1,5 @@
+import { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import './i18n';
 import Home from "./pages/Home";
@@ -43,20 +43,54 @@ export default function App() {
 }
 
 function AppLayout() {
+  const [WindowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [scrollDirection, setScrollDirection] = useState("down");
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const layoutRouteAreaRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!layoutRouteAreaRef.current) return;
+      const currentScrollY = layoutRouteAreaRef.current.scrollTop;
+
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection("up");
+      } else {
+        setScrollDirection("down");
+      }
+      setLastScrollY(currentScrollY);
+    };
+
+    const scrollableElement = layoutRouteAreaRef.current;
+    scrollableElement?.addEventListener("scroll", handleScroll);
+
+    return () => scrollableElement?.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
     <LayoutContainer>
-      <LayoutTopBar />
+      <LayoutTopBar scrollDirection={scrollDirection}/>
       <LayoutMainArea>
-        <LayoutSideNavbar/>
-        <LayoutSideContent />
-        <LayoutRouteArea>
+        {WindowWidth > 600 && <LayoutSideNavbar scrollDirection={scrollDirection}/>}
+        {WindowWidth > 600 && <LayoutSideContent />}
+        <LayoutRouteArea ref={layoutRouteAreaRef}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/search" element={<Search />} />
           </Routes>
         </LayoutRouteArea>
       </LayoutMainArea>
-      <LayoutBottomBar />
+      {WindowWidth < 600 && <LayoutSideNavbar scrollDirection={scrollDirection}/>}
+      <LayoutBottomBar style={{ display: WindowWidth <= 600 ? 'none' : 'flex' }}/>
     </LayoutContainer>
   );
 }

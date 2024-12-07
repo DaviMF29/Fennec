@@ -21,6 +21,8 @@
   margin: 0;
   padding: 0;
   color: var(--color-text-primary);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

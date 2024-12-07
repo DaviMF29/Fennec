@@ -4,21 +4,26 @@ import { useState } from "react";
 const LayoutSideContentContainer = styled.div`
     background-color: var(--color-primary);
     height: 100%;
-    width: ${({ width }) => width || "200px"};
-    max-width: ${({ maxWidth }) => maxWidth || "300px"};
-    min-width: ${({ minWidth }) => minWidth || "100px"};
+    width: ${({ width }) => width};
+    max-width: 300px;
+    min-width: 100px;
     position: relative;
     display: flex;
+    flex: 0 0 auto;
+
+    @media (max-width: 600px) {
+        max-width: 50%;
+    }
 `;
 
 const Resizer = styled.div`
     width: 5px;
     height: 100%;
     cursor: ew-resize;
-    background-color: var(--color-tertiary);
-    opacity: 0.05;
+    background-color: var(--color-secondary);
+    opacity: 0.25;
 
-    &:active{
+    &:active {
         background-color: var(--color-accent);
         opacity: 1;
         width: 2px;
@@ -29,7 +34,7 @@ const ContentArea = styled.div`
     display: flex;
     width: 100%;
     height: 100%;
-`
+`;
 
 function LayoutSideContent() {
     const [width, setWidth] = useState("200px");
@@ -39,9 +44,12 @@ function LayoutSideContent() {
         const startWidth = parseInt(width, 10);
 
         const handleMouseMove = (moveEvent) => {
-            const newWidth = Math.max(100, Math.min(startWidth + (moveEvent.clientX - startX), 300));
+            const newWidth = Math.max(
+                100,
+                Math.min(startWidth + (moveEvent.clientX - startX), 300)
+            );
             setWidth(`${newWidth}px`);
-        };        
+        };
 
         const handleMouseUp = () => {
             document.removeEventListener("mousemove", handleMouseMove);
@@ -54,10 +62,8 @@ function LayoutSideContent() {
 
     return (
         <LayoutSideContentContainer width={width}>
-            <ContentArea>
-
-            </ContentArea>
-            <Resizer onMouseDown={handleMouseDown}/>
+            <ContentArea />
+            <Resizer onMouseDown={handleMouseDown} />
         </LayoutSideContentContainer>
     );
 }
