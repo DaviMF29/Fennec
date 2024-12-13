@@ -5,6 +5,7 @@ import './i18n';
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Search from "./pages/Search";
+import Loading from "./components/Loading";
 
 import LayoutContainer from './components/layout/LayoutContainer';
 import LayoutTopBar from './components/layout/LayoutTopBar';
@@ -16,6 +17,7 @@ import LayoutBottomBar from './components/layout/LayoutBottomBar';
 
 export default function App() {
   const { i18n } = useTranslation();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language');
@@ -30,7 +32,12 @@ export default function App() {
     if (savedTheme) {
       document.body.classList.toggle('theme-white', savedTheme === 'white');
     }
+
+    const timer = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(timer);
   }, [i18n]);
+
+  if (isLoading) return <Loading />;
 
   return (
     <BrowserRouter>
